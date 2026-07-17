@@ -1,6 +1,7 @@
 import os
 from dotenv import load_dotenv
 from openai import OpenAI
+import argparse
 
 #loading API key from .env
 load_dotenv()
@@ -15,7 +16,11 @@ client = OpenAI(
     api_key=api_key,
 )
 
-
+#handling command-line args
+parser = argparse.ArgumentParser(description="Chatbot")
+parser.add_argument("user_prompt", type=str, help="User prompt")
+args = parser.parse_args()
+#Now we can access `args.user_prompt`
 
 def main():
     response = client.chat.completions.create(
@@ -23,7 +28,7 @@ def main():
     messages=[
         {
             "role": "user",
-            "content": "Why is Boot.dev such a great place to learn backend development? Use one paragraph maximum.",
+            "content": args.user_prompt
         }
     ])
 
