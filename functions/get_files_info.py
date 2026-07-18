@@ -55,11 +55,19 @@ def get_files_info(working_directory: str, directory: str = ".") -> str:
         if not os.path.isdir(target_dir):
             return f'Error: "{directory}" is not a directory'
 
-        # Passed both checks: it's allowed AND it's a real directory.
-        return f'Success: "{directory}" is within the working directory'
 
+        contents = ""
+
+        
+        for file in os.listdir(target_dir):
+            path = os.path.join(target_dir,file)
+            contents += f"- {file}: file_size={os.path.getsize(path)} bytes, is_dir={os.path.isdir(path)} \n"
+
+        # Passed both checks: it's allowed AND it's a real directory.
+        return contents
     except Exception as e:
         # All "tool call" functions must always return a string, never raise.
         # This catches anything unexpected from the os.path calls above and
         # turns it into a string the LLM agent can read instead of crashing.
         return f"Error: {e}"
+    
