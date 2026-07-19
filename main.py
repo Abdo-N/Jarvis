@@ -48,8 +48,11 @@ def generate_content(client, messages):
 
     if message.tool_calls:
         for tool_call in message.tool_calls:
-            function_args = json.loads(tool_call.function.arguments or "{}")
-            print(f"Calling function: {tool_call.function.name}({function_args})")
+            result_message = call_function(tool_call=tool_call, verbose=args.verbose)
+            if result_message["content"] == None:
+                raise Exception()
+            if args.verbose:
+                print(f"-> {result_message['content']}")
     
     print(f"Response: {response.choices[0].message.content}")
 
